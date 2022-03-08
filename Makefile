@@ -4,7 +4,7 @@ PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 CODE_FOLDER := src
 
-.PHONY: all dep build clean test test-v coverage coverhtml lint 
+.PHONY: all  clean test test-v help coverage coverhtml lint build-product-search
 
 all: build
 
@@ -23,21 +23,11 @@ coverage: ## Generate global code coverage report
 coverhtml: ## Generate global code coverage report in HTML
 	./tools/coverage.sh html;
 
-race: dep ## Run data race detector
-	@go test -race -short ${PKG_LIST}
-
-msan: dep ## Run memory sanitizer
-	@go test -msan -short ${PKG_LIST}
-
-
-dep: ## Get the dependencies
-	@go get -v -d ./...
-
-build: dep ## Build the binary file
-	@go build -v ./$(CODE_FOLDER)
-
 clean: ## Remove previous build
 	@rm -f $(PROJECT_NAME)
 
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+test-env: 
+	@docker run 
