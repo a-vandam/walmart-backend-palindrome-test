@@ -1,11 +1,10 @@
-FROM golang:1.17
+FROM  golang:1.17.1-stretch
 
-WORKDIR usr/src/cmd
-
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
+WORKDIR /app
 
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
 
-CMD ["main.go"]
+RUN `go mod tidy \
+  && go build src/cmd/main.go`
+
+CMD ["./main"]

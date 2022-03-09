@@ -1,9 +1,18 @@
-version: '3'
-services: 
-  product-service:
-    build: ./product-search
-    volumes:
-      - ./product:/usr/src/app
-    ports: 
-      - 5001:80
 
+version: '3.3'
+services:
+  product-rest-service:
+    container_name: 'product-rest-service'
+    build: .
+    ports:
+      - '8080:80'
+#   volumes:
+#- './product-rest-service:/go/src/app'
+
+##    depends_on:
+# ##      - 'mongo'
+#   mongo:
+#     image: 'mongo:latest'
+#     container_name: 'mongo'
+#     ports:
+#       - '27100:27017'

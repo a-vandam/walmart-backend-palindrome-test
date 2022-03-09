@@ -1,0 +1,18 @@
+FROM golang:1.17
+
+WORKDIR /go/src/app
+
+COPY go.mod ./
+RUN echo "STARTED"
+RUN go mod download && go mod verify
+
+COPY . .
+#RUN go get -d -v
+RUN ls -r
+RUN pwd
+RUN echo $PATH
+RUN go version
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o ./src/cmd/  ./...
+RUN echo $PATH
+RUN ./main

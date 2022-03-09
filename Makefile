@@ -1,12 +1,10 @@
-PROJECT_NAME := "json-lookup"
+PROJECT_NAME := "product-search-challenge"
 PKG := "gitlab.com/a.vandam/$(PROJECT_NAME)"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 CODE_FOLDER := src
 
 .PHONY: all  clean test test-v help coverage coverhtml lint build-product-search
-
-all: build
 
 lint: ## Lint the files
 	@golint -set_exit_status ${PKG_LIST}
@@ -29,5 +27,5 @@ clean: ## Remove previous build
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-test-env: 
-	@docker run 
+test-env:
+	@docker-compose kill && docker-compose up --remove-orphans --build
