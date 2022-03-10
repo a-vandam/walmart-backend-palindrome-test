@@ -1,32 +1,18 @@
 package configs
 
-import "fmt"
-
 type LogConfigs struct {
 	LogLevel string
 }
 
-var LogConfig *LogConfigs
-
 const MissingLogLevelMsg string = `log configurations errors : ( %v ) `
 
 func GetLogConfigs() (*LogConfigs, error) {
-	var reportedErrors []error
+	var logConfig, emptyConfig *LogConfigs
 
-	readMustVars.Do(func() {
-		LogConfig = new(LogConfigs)
-		var err error
-		var missingKeysErrors []error
-		LogConfig.LogLevel, err = getCompulsoryEnvVar("LOG_LEVEL")
-		if err != nil {
-			missingKeysErrors = append(missingKeysErrors, err)
-		}
-		reportedErrors = missingKeysErrors
-	},
-	)
-	if len(reportedErrors) != 0 {
-		return LogConfig, fmt.Errorf(MissingLogLevelMsg, reportedErrors)
+	var err error
+	logConfig.LogLevel, err = getCompulsoryEnvVar("LOG_LEVEL")
+	if err != nil {
+		return emptyConfig, err
 	}
-
-	return LogConfig, nil
+	return logConfig, nil
 }
