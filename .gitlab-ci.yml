@@ -2,7 +2,7 @@ image: golang:1.17.6
 
 variables:
   # Please edit to your GitLab project
-  REPO_NAME: json-lookup
+  REPO_NAME: product-search-challenge
   SOURCE_FOLDER: src
   # Lint URL:
   GOLINT_URL: golang.org/x/lint/golint
