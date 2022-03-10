@@ -10,10 +10,10 @@ MOCK_DB := "products-db"
 lint: ## Lint the files
 	@golint -set_exit_status ${PKG_LIST}
 
-test: ## Run unittests
+test-all: ## Run unittests
 	@go test -short ${PKG_LIST}
 
-test-v:
+test-all-v:
 	go test ${PKG_LIST} -v
 
 clean: ## Remove previous build

@@ -5,14 +5,10 @@ services:
     container_name: 'product-rest-service'
     build: .
     ports:
-      - '8080:80'
+      - '8080:8080'
+    env_file:
+      - test.env
 #   volumes:
 #- './product-rest-service:/go/src/app'
-
-##    depends_on:
-# ##      - 'mongo'
-#   mongo:
-#     image: 'mongo:latest'
-#     container_name: 'mongo'
-#     ports:
-#       - '27100:27017'
+    depends_on:
+      - 'mongodb-local'
