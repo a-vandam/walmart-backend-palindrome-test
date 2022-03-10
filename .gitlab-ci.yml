@@ -1,0 +1,69 @@
+image: golang:1.17.6
+
+variables:
+  # Please edit to your GitLab project
+  REPO_NAME: json-lookup
+  SOURCE_FOLDER: src
+  # Lint URL:
+  GOLINT_URL: golang.org/x/lint/golint
+
+before_script:
+  - mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
+  - cp -ra $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
+  - ls $GOPATH/src/
+  - cd $GOPATH/src/$REPO_NAME 
+
+services:
+  - postgres:11.7
+
+stages:          # List of stages for jobs, and their order of execution
+  - test
+  - build
+  - deploy
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - make build
+    - echo "Compile complete."
+
+unit-test-job:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  script:
+    - echo "Running unit tests... "
+    - make test-v
+    - echo "Finished unit tests ! "
+
+integration-test-job:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  script:
+    - echo "Running integration tests... "
+    - make test-v
+    - echo "Finished unit tests ! "
+
+lint-test-job:   # This job also runs in the test stage.
+  stage: test    # It can run at the same time as unit-test-job (in parallel).
+  allow_failure: true
+  script:
+  
+    - echo "Linting code... This will take about 10 seconds."
+    - echo "Current directory:"
+    - pwd
+    #Linting dependencies
+    - go get $GOLINT_URL
+    - make lint
+    - echo "No golint issues found. =)"
+    #Go vet:
+    - echo "Current directory:"
+    - pwd
+    - echo "Runnin Go vet..."
+    - cd $GOPATH/src/$REPO_NAME 
+    - go vet ./$SOURCE_FOLDER
+    - echo "Go vet OK! :)"
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
