@@ -1,7 +1,11 @@
 package services
 
-import "context"
+import (
+	"context"
+
+	"gitlab.com/a.vandam/product-search-challenge/src/domain/entities"
+)
 
 type GetProductByIdServiceContract interface {
-	GetProductByIdService(id int32, ctx context.Context)
+	GetProductsByIdService(id int32, ctx context.Context) ([]entities.ProductInfo, error)
 }
