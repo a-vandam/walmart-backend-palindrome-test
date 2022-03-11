@@ -4,15 +4,14 @@ type LogConfigs struct {
 	LogLevel string
 }
 
-const MissingLogLevelMsg string = `log configurations errors : ( %v ) `
+const logLevelKey string = "LOG_LEVEL"
 
 func GetLogConfigs() (*LogConfigs, error) {
-	var logConfig, emptyConfig *LogConfigs
-
+	var logConfig LogConfigs
 	var err error
-	logConfig.LogLevel, err = getCompulsoryEnvVar("LOG_LEVEL")
+	logConfig.LogLevel, err = getCompulsoryEnvVar(logLevelKey)
 	if err != nil {
-		return emptyConfig, err
+		return &LogConfigs{}, err
 	}
-	return logConfig, nil
+	return &logConfig, nil
 }
