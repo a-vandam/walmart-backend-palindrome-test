@@ -11,7 +11,7 @@ type LogFactory struct {
 }
 
 func (lf *LogFactory) CreateLog(prefix string) LogContract {
-	log := log{
+	log := Log{
 		logrus.New(),
 	}
 	log.loggerPackage.SetFormatter(&logrus.JSONFormatter{})

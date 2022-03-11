@@ -1,6 +1,8 @@
 package logger
 
 import (
+	"strings"
+
 	"github.com/sirupsen/logrus"
 )
 
@@ -12,25 +14,27 @@ type LogContract interface {
 	Fatal(string, ...interface{})
 }
 
-type log struct {
+type Log struct {
 	loggerPackage *logrus.Logger
 }
 
-func (l log) Info(format string, msg ...interface{}) {
+func (l Log) Info(format string, msg ...interface{}) {
 	l.loggerPackage.Infof(format, msg...)
 }
 
-func (l log) Debug(format string, msg ...interface{}) {
+func (l Log) Debug(format string, msg ...interface{}) {
 	l.loggerPackage.Debugf(format, msg...)
 }
 
-func (l log) Error(format string, msg ...interface{}) {
-	l.loggerPackage.Errorf(format, msg...)
+//TODO: error now prints stack trace on loggin. Experimental, tbh.
+func (l Log) Error(format string, msg ...interface{}) {
+	formatWithStackTrace := strings.ReplaceAll(format, "%v", "%+v")
+	l.loggerPackage.Errorf(formatWithStackTrace, msg...)
 }
 
-func (l log) Trace(format string, msg ...interface{}) {
+func (l Log) Trace(format string, msg ...interface{}) {
 	l.loggerPackage.Tracef(format, msg...)
 }
-func (l log) Fatal(format string, msg ...interface{}) {
+func (l Log) Fatal(format string, msg ...interface{}) {
 	l.loggerPackage.Fatalf(format, msg...)
 }
