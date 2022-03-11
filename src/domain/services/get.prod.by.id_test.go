@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"gitlab.com/a.vandam/product-search-challenge/src/domain/entities"
+	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
 func TestGetAProduct(t *testing.T) {
@@ -35,6 +36,55 @@ func TestGetAProduct(t *testing.T) {
 	t.Run(testCase.testName, testCase.testAndAssert)
 }
 
+func TestGetProductWithPalindromeId(t *testing.T) {
+	testCase := getProdByIDTestCase{
+
+		testName: "retrieve a product with palindrome id",
+		id:       181,
+		existingProductsInPortMock: map[uint]entities.ProductInfo{
+			181: {
+				Id:          181,
+				Title:       "a palindromic(?) product",
+				FullPrice:   1000,
+				Description: "palindrome",
+			},
+		},
+		expectedProd: entities.ProductInfo{
+			Id:                 181,
+			Title:              "a palindromic(?) product",
+			FullPrice:          1000,
+			FinalPrice:         500,
+			PriceModifications: -0.5,
+			Description:        "palindrome",
+		},
+		expectedErr: "",
+	}
+
+	t.Run(testCase.testName, testCase.testAndAssert)
+}
+
+func TestNoProductFound(t *testing.T) {
+	testCase := getProdByIDTestCase{
+
+		testName: "retrieve no product as id doesn't match any",
+		id:       55,
+		existingProductsInPortMock: map[uint]entities.ProductInfo{
+			181: {
+				Id:          181,
+				Title:       "a palindromic(?) product",
+				FullPrice:   1000,
+				Description: "palindrome",
+			},
+		},
+		expectedProd: entities.ProductInfo{},
+		expectedErr:  "",
+	}
+
+	t.Run(testCase.testName, testCase.testAndAssert)
+}
+
+// End test cases
+
 type getProdByIDTestCase struct {
 	testName                   string
 	id                         uint
@@ -48,11 +98,15 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 	t.Logf("testing function")
 
 	/**---------------------- FUNCTION UNDER TEST -----------------------**/
+	/*Dependencies*/
 	mockedPort := mockPort{
 		products: testCase.existingProductsInPortMock,
 		err:      testCase.errorPortInMock,
 	}
-	serviceDef := GetProductByIdServDef(mockedPort)
+	loggerFactory := logger.LogFactory{LogLevel: "INFO"}
+	log := loggerFactory.CreateLog("")
+	/*END Dependencies*/
+	serviceDef := GetProductByIdServDef(mockedPort, log)
 	testCtx := context.Background()
 	product, err := serviceDef(testCase.id, testCtx)
 	/**---------------------- END FUNCTION UNDER TEST -----------------------**/
