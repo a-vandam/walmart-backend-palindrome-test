@@ -1,0 +1,13 @@
+{
+    "error": "",
+    "resources": {
+        "id": 23,
+        "title":"a product",
+        "description": "i'm a merchandise",
+        "imageURL":"http://blablabla",
+        "fullPrice": 100,
+        "finalPrice": 80,
+        "priceModifications": -0.2
+
+    }
+}

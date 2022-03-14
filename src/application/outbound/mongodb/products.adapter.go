@@ -1,5 +1,5 @@
 package mongodb
 
 type ProductsAdapter struct {
-	DbClient ConnectorContract
+	DbClient GetAllProductsContract
 }

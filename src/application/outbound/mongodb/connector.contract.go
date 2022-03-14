@@ -1,5 +1,9 @@
 package mongodb
 
-type ConnectorContract interface {
-	GetAll(string query)
+type GetAllProductsContract interface {
+	GetAll(query string)
+}
+
+type GetProductByIdContract interface {
+	GetProductById(id uint32)
 }
