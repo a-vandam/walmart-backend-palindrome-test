@@ -2,11 +2,11 @@ package services
 
 import "testing"
 
-func TestIsPalindromeUint(t *testing.T) {
+func TestIsPalindromeInt(t *testing.T) {
 
 	tests := []struct {
 		testName string
-		id       uint
+		id       int
 		want     bool
 	}{
 		{
@@ -42,7 +42,7 @@ func TestIsPalindromeUint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.testName, func(t *testing.T) {
 			t.Logf("id under test: %v", tt.id)
-			if got := isPalindromeUint(tt.id); got != tt.want {
+			if got := isPalindromeInt(tt.id); got != tt.want {
 				t.Errorf("palindrome check for uint test failed. got: %v, want: %v", got, tt.want)
 				t.Fail()
 			}

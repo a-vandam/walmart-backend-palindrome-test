@@ -7,5 +7,5 @@ import (
 )
 
 type GetProductByIdServiceContract interface {
-	GetProductsByIdService(id int32, ctx context.Context) ([]entities.ProductInfo, error)
+	GetProductsById(id int, ctx context.Context) (entities.ProductInfo, error)
 }

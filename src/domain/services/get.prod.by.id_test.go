@@ -14,7 +14,7 @@ func TestGetAProduct(t *testing.T) {
 
 		testName: "retrieve one product, not a palindrome",
 		id:       123,
-		existingProductsInPortMock: map[uint]entities.ProductInfo{
+		existingProductsInPortMock: map[int]entities.ProductInfo{
 			123: {
 				Id:                 123,
 				Title:              "a random product",
@@ -41,7 +41,7 @@ func TestGetProductWithPalindromeId(t *testing.T) {
 
 		testName: "retrieve a product with palindrome id",
 		id:       181,
-		existingProductsInPortMock: map[uint]entities.ProductInfo{
+		existingProductsInPortMock: map[int]entities.ProductInfo{
 			181: {
 				Id:          181,
 				Title:       "a palindromic(?) product",
@@ -68,7 +68,7 @@ func TestNoProductFound(t *testing.T) {
 
 		testName: "retrieve no product as id doesn't match any",
 		id:       55,
-		existingProductsInPortMock: map[uint]entities.ProductInfo{
+		existingProductsInPortMock: map[int]entities.ProductInfo{
 			181: {
 				Id:          181,
 				Title:       "a palindromic(?) product",
@@ -87,8 +87,8 @@ func TestNoProductFound(t *testing.T) {
 
 type getProdByIDTestCase struct {
 	testName                   string
-	id                         uint
-	existingProductsInPortMock map[uint]entities.ProductInfo
+	id                         int
+	existingProductsInPortMock map[int]entities.ProductInfo
 	errorPortInMock            error
 	expectedProd               entities.ProductInfo
 	expectedErr                string
@@ -134,10 +134,10 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 
 /*Mocking*/
 type mockPort struct {
-	products map[uint]entities.ProductInfo
+	products map[int]entities.ProductInfo
 	err      error
 }
 
-func (mock mockPort) GetProductsById(id uint, ctx context.Context) (entities.ProductInfo, error) {
+func (mock mockPort) GetProductsById(id int, ctx context.Context) (entities.ProductInfo, error) {
 	return mock.products[id], mock.err
 }

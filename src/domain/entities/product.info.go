@@ -1,7 +1,7 @@
 package entities
 
 type ProductInfo struct {
-	Id                 uint
+	Id                 int
 	Title              string
 	Description        string
 	ImageURL           string

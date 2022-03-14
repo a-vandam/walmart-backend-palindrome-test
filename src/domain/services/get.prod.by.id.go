@@ -10,8 +10,8 @@ import (
 
 const DiscountByPalindromeIdCoefficient float32 = 0.5
 
-func GetProductByIdServDef(getProdByIdPort ports.GetProductByIdPort, log logger.LogContract) func(id uint, ctx context.Context) (entities.ProductInfo, error) {
-	return func(id uint, ctx context.Context) (entities.ProductInfo, error) {
+func GetProductByIdServDef(getProdByIdPort ports.GetProductByIdPort, log logger.LogContract) func(id int, ctx context.Context) (entities.ProductInfo, error) {
+	return func(id int, ctx context.Context) (entities.ProductInfo, error) {
 		log.Info("trying to look for a product with id: %v", id)
 		prod, err := getProdByIdPort.GetProductsById(id, ctx)
 		if err != nil {
@@ -23,7 +23,7 @@ func GetProductByIdServDef(getProdByIdPort ports.GetProductByIdPort, log logger.
 			return prod, nil
 		}
 
-		if isPalindromeUint(prod.Id) {
+		if isPalindromeInt(prod.Id) {
 			applyDiscount(&prod, DiscountByPalindromeIdCoefficient)
 		}
 		return prod, err

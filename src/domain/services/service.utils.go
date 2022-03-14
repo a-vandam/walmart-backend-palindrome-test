@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func isPalindromeUint(id uint) bool {
+func isPalindromeInt(id int) bool {
 	intAsString := strconv.FormatUint(uint64(id), 10)
 	return isPalindromeString(intAsString)
 

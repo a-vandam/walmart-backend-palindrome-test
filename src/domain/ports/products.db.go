@@ -7,5 +7,5 @@ import (
 )
 
 type GetProductByIdPort interface {
-	GetProductsById(id uint, ctx context.Context) (entities.ProductInfo, error)
+	GetProductsById(id int, ctx context.Context) (entities.ProductInfo, error)
 }
