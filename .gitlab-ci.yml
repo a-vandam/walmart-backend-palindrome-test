@@ -6,6 +6,7 @@ variables:
   SOURCE_FOLDER: src
   # Lint URL:
   GOLINT_URL: golang.org/x/lint/golint
+  MAIN_FILE: main.go
 
 before_script:
   - mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
@@ -25,7 +26,7 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code..."
-    - make start-test-env
+    - go build ./$SOURCE_FOLDER/$MAIN_FILE
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
