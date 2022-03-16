@@ -3,12 +3,13 @@ version: '3.3'
 services:
   product-rest-service:
     container_name: 'product-rest-service'
-    build: .
-    ports:
-      - '8080:8080'
+    build: 
+      context: .
+      dockerfile: Dockerfile
     env_file:
-      - test.env
-#   volumes:
-#- './product-rest-service:/go/src/app'
-    depends_on:
-      - 'mongodb-local'
+      - .env
+    ports:
+      - '${HTTP_IN_PORT}:${HTTP_IN_PORT}'
+
+
+  
