@@ -1,48 +1,54 @@
-package http
+package inhttp
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"gitlab.com/a.vandam/product-search-challenge/src/domain/entities"
 	"gitlab.com/a.vandam/product-search-challenge/src/domain/services"
 	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
-func CreateGetProdByIdHandlerFunc(svc services.GetProductByIdServiceContract, log logger.LogContract) http.HandlerFunc {
+type GetProductByIdHandlerDependencies struct {
+	Svc services.GetProductByIdServiceContract
+	Log logger.LogContract
+}
+
+func CreateGetProdByIdHandlerFunc(dep GetProductByIdHandlerDependencies) http.HandlerFunc {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		idInPath := req.Context().Value(ProductIdCtxKey{})
-		log.Info("received GET request for id: %v", idInPath)
-		pathId := parseInterfToInt(idInPath)
-		if pathId == DefaultErrorInt || pathId == 0 || idInPath == nil {
+		pathParamReceived := req.Context().Value(ProductIdPathParamCtxKey{}).([]string)
+		idInPath, _ := strconv.Atoi(pathParamReceived[0])
+		dep.Log.Info("received GET request for id: %v", idInPath)
+		if idInPath == DefaultErrorInt || idInPath == 0 {
 			errMsg := fmt.Sprintf("invalid product id path parameter sent: received: %v", idInPath)
-			log.Error(errMsg)
+			dep.Log.Error(errMsg)
 			http.Error(rw, wrapErrAsJson(errors.New(errMsg)), http.StatusBadRequest)
 			return
 		}
 
 		//Useful for time outs
 		reqContext := req.Context()
-		log.Debug("created context to obtain products")
-		product, err := svc.GetProductsById(pathId, reqContext)
+		dep.Log.Debug("created context to obtain products")
+		product, err := dep.Svc.GetProductById(idInPath, reqContext)
 		if err != nil {
-			log.Error("received an error while fetching product by id: %v", err)
+			dep.Log.Error("received an error while fetching product by id: %v", err)
 			http.Error(rw, wrapErrAsJson(err), http.StatusInternalServerError)
 			return
 		}
-		log.Info("mapping product to response")
-		log.Debug("product being mapped: %+v", product)
+		dep.Log.Info("mapping product to response")
+		dep.Log.Debug("product being mapped: %+v", product)
 		response, err := mapProductToJsonResponse(&product)
 		if err != nil {
-			log.Error("received an error while generating response: %v", err)
+			dep.Log.Error("received an error while generating response: %v", err)
 			http.Error(rw, wrapErrAsJson(err), http.StatusInternalServerError)
 			return
 		}
-		log.Debug("response to write: %+v", response)
+		dep.Log.Debug("response to write: %+v", string(response))
 		rw.Write(response)
-		log.Info("response has been sent back")
+		dep.Log.Info("response has been sent back")
 	})
 
 }

@@ -1,8 +1,9 @@
-package http
+package inhttp
 
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -60,13 +61,14 @@ func (testCase getProdByIDTestReq) testAndAssert(t *testing.T) {
 	}
 	loggerFactory := logger.LogFactory{LogLevel: "INFO"}
 	log := loggerFactory.CreateLog("")
+	dependencies := GetProductByIdHandlerDependencies{mockedSvc, log}
 	/*END Dependencies*/
 	// Test function //
-	handlerFunc := CreateGetProdByIdHandlerFunc(mockedSvc, log)
+	handlerFunc := CreateGetProdByIdHandlerFunc(dependencies)
 
 	/*Create test request and server*/
 	var req *http.Request
-	requestContext := context.WithValue(context.Background(), ProductIdCtxKey{}, testCase.id)
+	requestContext := context.WithValue(context.Background(), ProductIdPathParamCtxKey{}, []string{fmt.Sprint(testCase.id)})
 
 	if testCase.bodyFile == "" {
 		req = httptest.NewRequest(testCase.verb, testCase.path, nil)
@@ -116,6 +118,6 @@ type getProdByIdSvcMock struct {
 	svcErr  error
 }
 
-func (mock getProdByIdSvcMock) GetProductsById(id int, ctx context.Context) (entities.ProductInfo, error) {
+func (mock getProdByIdSvcMock) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
 	return mock.product, mock.svcErr
 }
