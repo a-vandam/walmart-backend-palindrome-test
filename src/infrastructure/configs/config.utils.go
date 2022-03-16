@@ -18,3 +18,8 @@ func getCompulsoryEnvVar(envVarKey string) (string, error) {
 	}
 	return envVarObtained, nil
 }
+
+func getOptionalEnvVar(envVarKey string) string {
+	envVarObtained := os.Getenv(envVarKey)
+	return envVarObtained
+}
