@@ -77,7 +77,7 @@ func TestNoProductFound(t *testing.T) {
 			},
 		},
 		expectedProd: entities.ProductInfo{},
-		expectedErr:  "",
+		expectedErr:  "no products found with id: 55",
 	}
 
 	t.Run(testCase.testName, testCase.testAndAssert)
@@ -105,10 +105,13 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 	}
 	loggerFactory := logger.LogFactory{LogLevel: "INFO"}
 	log := loggerFactory.CreateLog("")
+	svc := GetProductByIdServiceDefinition{
+		Port: mockedPort,
+		Log:  log,
+	}
 	/*END Dependencies*/
-	serviceDef := GetProductByIdServDef(mockedPort, log)
 	testCtx := context.Background()
-	product, err := serviceDef(testCase.id, testCtx)
+	product, err := svc.GetProductById(testCase.id, testCtx)
 	/**---------------------- END FUNCTION UNDER TEST -----------------------**/
 
 	if !assert.Equal(t, testCase.expectedProd, product, "difference in value expected (%v) and obtained (%v)", testCase.expectedProd, product) {
@@ -124,7 +127,7 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 	}
 	if testCase.expectedErr != "" && err != nil {
 		//comparing errors
-		if assert.EqualErrorf(t, err, testCase.expectedErr, "function returned an unexpected error: expected: %v vs found: %v", testCase.expectedErr, err) {
+		if !assert.EqualErrorf(t, err, testCase.expectedErr, "function returned an unexpected error: expected: %v vs found: %v", testCase.expectedErr, err) {
 			t.FailNow()
 		}
 	}
@@ -138,6 +141,6 @@ type mockPort struct {
 	err      error
 }
 
-func (mock mockPort) GetProductsById(id int, ctx context.Context) (entities.ProductInfo, error) {
+func (mock mockPort) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
 	return mock.products[id], mock.err
 }
