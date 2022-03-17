@@ -84,7 +84,7 @@ func (testCase getProdByTextTestReq) testAndAssert(t *testing.T) {
 	}
 	loggerFactory := logger.LogFactory{LogLevel: "DEBUG"}
 	log := loggerFactory.CreateLog("")
-	dependencies := GetProductsByField{mockedSvc, log}
+	dependencies := GetProductsByFieldDependencies{mockedSvc, log}
 	/*END Dependencies*/
 	// Test function //
 	handlerFunc := CreateGetProductByFieldHandlerFunc(dependencies)
