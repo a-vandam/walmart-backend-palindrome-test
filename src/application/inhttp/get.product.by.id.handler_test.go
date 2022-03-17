@@ -84,7 +84,7 @@ func (testCase getProdByIDTestReq) testAndAssert(t *testing.T) {
 
 	/*Create test request and server*/
 	var req *http.Request
-	requestContext := context.WithValue(context.Background(), ProductIDPathParamCtxKey{}, []string{fmt.Sprint(testCase.id)})
+	requestContext := context.WithValue(context.Background(), productIDPathParamCtxKey{}, []string{fmt.Sprint(testCase.id)})
 
 	if testCase.bodyFile == "" {
 		req = httptest.NewRequest(testCase.verb, testCase.path, nil)
