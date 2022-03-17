@@ -9,12 +9,12 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
-type GetProductByField struct {
+type GetProductsByField struct {
 	Svc services.GetProductByTextServiceContract
 	Log logger.LogContract
 }
 
-func CreateGetProductByFieldHandlerFunc(dep GetProductByField) http.HandlerFunc {
+func CreateGetProductByFieldHandlerFunc(dep GetProductsByField) http.HandlerFunc {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		textToSearch := req.URL.Query().Get("text")
 		dep.Log.Info("received GET request for text: %v", textToSearch)
