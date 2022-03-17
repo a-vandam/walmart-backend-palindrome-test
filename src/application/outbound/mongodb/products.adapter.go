@@ -52,3 +52,42 @@ func (a *ProductsAdapter) GetProductById(id int, ctx context.Context) (entities.
 	return results[0], nil
 
 }
+
+func (a *ProductsAdapter) GetProductsByText(text string, ctx context.Context) ([]entities.ProductInfo, error) {
+	results, err := a.DBConnector.GetFromDatabaseUsingFilter(ctx, ProductsDatabaseName, ProductsCollectionName, bson.D{
+		primitive.E{
+			Key: "$or", Value: bson.A{
+				bson.D{
+					primitive.E{
+						Key: "brand",
+						Value: primitive.Regex{
+							Pattern: "" + text + "",
+							Options: "",
+						},
+					}},
+				bson.D{
+					primitive.E{
+						Key: "description",
+						Value: primitive.Regex{
+							Pattern: "" + text + "",
+							Options: "",
+						},
+					},
+				},
+			},
+		},
+	})
+
+	if err != nil {
+		a.Log.Error("failed to obtain all databases names: %v", err)
+		return []entities.ProductInfo{}, err
+	}
+
+	a.Log.Debug("result obtained: %+v", results)
+	if len(results) == 0 {
+		msg := fmt.Sprintf("no registry for text :%v in database", text)
+		a.Log.Error(msg)
+		return []entities.ProductInfo{}, errors.New(msg)
+	}
+	return results, nil
+}
