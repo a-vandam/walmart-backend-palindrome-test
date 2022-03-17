@@ -1,0 +1,23 @@
+{
+    "error": "",
+    "resources": [
+        {
+        "id":                 99,
+        "title":              "example title",
+        "description":        "i'm a merchandise",
+        "imageURL":           "http://blablabla",
+        "fullPrice":          100,
+        "finalPrice":         100,
+        "priceModifications": 0
+        },
+        {
+        "id":                 150,
+        "title":              "title",
+        "description":        "i'm an example merchandise",
+        "imageURL":           "http://blablabla",
+        "fullPrice":          990,
+        "finalPrice":         990,
+        "priceModifications": 0
+        }
+    ]
+}
