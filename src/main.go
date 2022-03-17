@@ -43,7 +43,9 @@ func main() {
 		DBConnector: mongoDbConnector,
 		Log:         logFactory.CreateLog(""),
 	}
+	//handlers
 	getProdByIdHandlerFunc := startGetProductByIdHandler(&productsAdapter, &logFactory)
+	getProdByTextHandlerFunc := startGetProductByTextHandler(&productsAdapter, &logFactory)
 
 	//routes
 	log.Info("creating products router")
@@ -51,6 +53,7 @@ func main() {
 		Log: logFactory.CreateLog(""),
 	}
 	productsRouter = productsRouter.AddRoute(http.MethodGet, "/api/products/([0-9]+)", *getProdByIdHandlerFunc)
+	productsRouter = productsRouter.AddRoute(http.MethodGet, "/api/products/search", *getProdByTextHandlerFunc)
 	log.Debug("products router registered routes: %+v", productsRouter.RegisteredRoutes())
 
 	//server
@@ -101,6 +104,19 @@ func startGetProductByIdHandler(productsAdapter *mongodb.ProductsAdapter, logFac
 		Log: logFactory.CreateLog(""),
 	})
 	log.Info("get prod handler func started")
+	return &getProdByIdHandlerFunc
+}
+
+func startGetProductByTextHandler(productsAdapter *mongodb.ProductsAdapter, logFactory *logger.LogFactory) *http.HandlerFunc {
+	getProductByTextServiceDef := services.GetProductsByTextServiceDefinition{
+		Port: productsAdapter,
+		Log:  logFactory.CreateLog(""),
+	}
+	getProdByIdHandlerFunc := inhttp.CreateGetProductByFieldHandlerFunc(inhttp.GetProductsByFieldDependencies{
+		Svc: getProductByTextServiceDef,
+		Log: logFactory.CreateLog(""),
+	})
+	log.Info("get prod by field handler func started")
 	return &getProdByIdHandlerFunc
 }
 
