@@ -1,8 +1,8 @@
 
 version: '3.3'
 services:
-  product-rest-service:
-    container_name: 'product-rest-service'
+  product-search-challenge:
+    container_name: 'product-search-challenge'
     build: 
       context: .
       dockerfile: Dockerfile
