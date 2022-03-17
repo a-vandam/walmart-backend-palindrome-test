@@ -3,6 +3,7 @@ package inhttp
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -33,6 +34,21 @@ func TestGetExistingProdWithIdInPath(t *testing.T) {
 		},
 		expectedCode:     200,
 		expectedJsonResp: "json_examples/get.product.by.id_ok.response.json",
+	}
+
+	t.Run(testCase.testName, testCase.testAndAssert)
+}
+func TestRequestToGetNonExistentProduct(t *testing.T) {
+	testCase := getProdByIDTestReq{
+		testName:         "request with path param sent but no prod",
+		path:             "http://svctest/products/9999",
+		id:               9999,
+		bodyFile:         "",
+		verb:             "GET",
+		svcProdsResponse: entities.ProductInfo{},
+		svcErrResponse:   errors.New("no registry for id :9999 in database"),
+		expectedCode:     500,
+		expectedJsonResp: "json_examples/get.product.by.id_no_prod.found.json",
 	}
 
 	t.Run(testCase.testName, testCase.testAndAssert)
