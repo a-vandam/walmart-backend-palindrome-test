@@ -5,7 +5,7 @@ This project was created to perform a tech interview for Walmart Back End's posi
     * MongoDB Client for connection to the DB.
     * Docker + DockerCompose + make commands.
     
-The main idea was to provide a RESTAPI that consumes the provided DB , using Solid, Hex Arch, Clean Code concepts and TDD. Case definitions can be found below.
+The main idea was to provide a RESTAPI that consumes the provided DB , using Solid, Clean Code concepts and TDD. Case definitions can be found below.
 The layer separations are done resembling the ports+adapters architectural pattern. They follow this criteria:
     - Application layer:
         - Adapters implementations, both inbound (inhttp package) and outbound (mongo db adapter and it's mongoclient which embeds). 
@@ -21,22 +21,23 @@ All layers are coupled using Polimorphism and dependency injection in the main.g
 All Go files in the packages are named after their intended use. Utils with their tests are provided, as it was designed using TDD as much as time allowed me. 
 
 
-    FAQ: 
+FAQ: 
 
     - Why no frameworks like Gin?
         TBH, because I wanted to see what I could do with the standard library. Although I knew I would face limitations as I use Go at work as a Proffesional, it was a way to get revenge on little things that I've had to bypass and not give attention to, as I work under the stress of time. MAINLY, Routers . And reusing Test Code.
     - Why no tests on the MongoDBAdapter?
         I just didn't have the time.
     - Are you planning to add Integration tests?
-        Of course. Could not add them until now as I was rushing with the assignment, and I work 9hs a day. =|
+        Of course. Could not add them until now as I was rushing with the assignment, and I work 9hs a day. 
 
 
 How to:
+
     * To run the project:
         - Clone the project.
         - Run "make start-test-env"
         
-    Note: remember to have docker installed.
+        Note: remember to have docker installed.
     
     * To build a DockerImage:
         - Clone the project.
@@ -69,17 +70,24 @@ How to:
 
         Note: Replace localhost and 8080 if needed. To change the /api/products, just change it in the AddRoutes method in main.go.
 
+
 Endpoints available:
-    TO look for an exact ID:
-    - GET from HOST:PORT/api/products/{product id to look for}
+    * To look for an exact ID:
+        - GET from HOST:PORT/api/products/{product id to look for}
     
 
-    To look for a string in title OR  description fields:
-    - GET from HOST:PORT/api/products/search?text={text to look for}
+    * To look for a string in title OR  description fields:
+        - GET from HOST:PORT/api/products/search?text={text to look for}
 
 
 If you need further data, feel free to contact me.
 The Walmart repo can be found here:
-    - 
+    - https://github.com/walmartdigital/products-db
 
 
+
+Useful resources:
+If you want to get a grasp of some parts implemented here, read from:
+    - https://benhoyt.com/writings/go-routing/ - AWESOME article on path parameters in Go and routing.
+    - https://www.honeybadger.io/blog/golang-logging/  - Great article on diff logging strategies and   practices
+    - https://www.youtube.com/watch?v=oL6JBUk6tj0
