@@ -7,6 +7,7 @@ const mongoDatabasePasswordKey string = "MONGO_DATABASE_PASSWORD"
 const mongoDatabaseHostKey string = "MONGO_DATABASE_HOST"
 const mongoDatabaseAuthSourceKey string = "AUTH_SOURCE"
 
+/*GetProductsDatabaseConfigs creates a poitner to a struct that holds all DB configurations. If any variable are missing, returns an error with description of the field missing.*/
 func GetProductsDatabaseConfigs() (*ProductsDBConfigurations, error) {
 	var err error
 	var emptyConfig ProductsDBConfigurations
@@ -39,6 +40,7 @@ func GetProductsDatabaseConfigs() (*ProductsDBConfigurations, error) {
 	return &ProductsDBConfig, nil
 }
 
+/*ProductsDBConfigurations are configs needed for connecting to DB. Should be set up via the GetProductsDatabaseConfigs */
 type ProductsDBConfigurations struct {
 	MongoDatabaseName     string
 	MongoDatabasePort     string
@@ -48,4 +50,5 @@ type ProductsDBConfigurations struct {
 	MongoAuthSource       string
 }
 
+/*ProductsDBConfig allows for storage of the configurations outside of method. */
 var ProductsDBConfig ProductsDBConfigurations

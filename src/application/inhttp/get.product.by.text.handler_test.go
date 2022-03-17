@@ -23,7 +23,7 @@ func TestGetExistingProdByText(t *testing.T) {
 		verb:     "GET",
 		svcProdsResponse: []entities.ProductInfo{
 			{
-				Id:                 99,
+				ID:                 99,
 				Title:              "example title",
 				Description:        "i'm a merchandise",
 				ImageURL:           "http://blablabla",
@@ -32,7 +32,7 @@ func TestGetExistingProdByText(t *testing.T) {
 				PriceModifications: 0,
 			},
 			{
-				Id:                 150,
+				ID:                 150,
 				Title:              "title",
 				Description:        "i'm an example merchandise",
 				ImageURL:           "http://blablabla",
@@ -42,7 +42,7 @@ func TestGetExistingProdByText(t *testing.T) {
 			},
 		},
 		expectedCode:     200,
-		expectedJsonResp: "json_examples/get.product.by.text_ok.response.json",
+		expectedJSONResp: "json_examples/get.product.by.text_ok.response.json",
 	}
 
 	t.Run(testCase.testName, testCase.testAndAssert)
@@ -56,7 +56,7 @@ func TestRequestToGetNonExistentProductByTitle(t *testing.T) {
 		svcProdsResponse: []entities.ProductInfo{{}},
 		svcErrResponse:   errors.New("no registry for text : example in database"),
 		expectedCode:     500,
-		expectedJsonResp: "json_examples/get.product.by.text_no.prod.found.json",
+		expectedJSONResp: "json_examples/get.product.by.text_no.prod.found.json",
 	}
 
 	t.Run(testCase.testName, testCase.testAndAssert)
@@ -70,7 +70,7 @@ type getProdByTextTestReq struct {
 	svcProdsResponse []entities.ProductInfo
 	svcErrResponse   error
 	expectedCode     int
-	expectedJsonResp string
+	expectedJSONResp string
 }
 
 func (testCase getProdByTextTestReq) testAndAssert(t *testing.T) {
@@ -114,13 +114,13 @@ func (testCase getProdByTextTestReq) testAndAssert(t *testing.T) {
 		t.FailNow()
 		return
 	}
-	expectedBody, bodyNotFoundErr := os.ReadFile(testCase.expectedJsonResp)
+	expectedBody, bodyNotFoundErr := os.ReadFile(testCase.expectedJSONResp)
 	if bodyNotFoundErr != nil {
 		t.Logf("json file that stores the expected body has not been found: %v", bodyNotFoundErr)
 		t.FailNow()
 		return
 	}
-	var expectedBodyAsMap, receivedBodyAsMap embeddingMultipleResourcesJsonResponse
+	var expectedBodyAsMap, receivedBodyAsMap embeddingMultipleResourcesJSONResponse
 	json.Unmarshal(expectedBody, &expectedBodyAsMap)
 	receivedBody := responseWriter.Body.Bytes()
 	json.Unmarshal(receivedBody, &receivedBodyAsMap)
@@ -138,6 +138,6 @@ type getProdByTextSvcMock struct {
 	svcErr  error
 }
 
-func (mock getProdByTextSvcMock) GetProductsByText(text string, ctx context.Context) ([]entities.ProductInfo, error) {
+func (mock getProdByTextSvcMock) GetProductsByText(ctx context.Context, text string) ([]entities.ProductInfo, error) {
 	return mock.product, mock.svcErr
 }

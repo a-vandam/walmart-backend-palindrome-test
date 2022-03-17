@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+/*DiscountByPalindrome is the coefficient by which product's Full Price that have a palindrome in ID or text  fields should be multiplied to get the Final Price*/
 const DiscountByPalindrome float32 = 0.5
 
 func isPalindromeInt(id int) bool {

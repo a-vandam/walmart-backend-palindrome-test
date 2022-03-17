@@ -10,12 +10,14 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
+/*GetProductsByTextServiceDefinition holds the dependencies needed for the service to work*/
 type GetProductsByTextServiceDefinition struct {
 	Port ports.GetProductsByTextPort
 	Log  logger.LogContract
 }
 
-func (svc GetProductsByTextServiceDefinition) GetProductsByText(text string, reqCtx context.Context) ([]entities.ProductInfo, error) {
+/*GetProductsByText stores the service definition to get products via text fields search*/
+func (svc GetProductsByTextServiceDefinition) GetProductsByText(reqCtx context.Context, text string) ([]entities.ProductInfo, error) {
 
 	svc.Log.Info("trying to look for a product with text: %v", text)
 	if len(text) < 3 {
@@ -23,7 +25,7 @@ func (svc GetProductsByTextServiceDefinition) GetProductsByText(text string, req
 		svc.Log.Debug(msg)
 		return []entities.ProductInfo{}, errors.New(msg)
 	}
-	prods, err := svc.Port.GetProductsByText(text, reqCtx)
+	prods, err := svc.Port.GetProductsByText(reqCtx, text)
 	if err != nil {
 		svc.Log.Error("error while looking for a product by text. text: %v , error: %v", text, err)
 		return []entities.ProductInfo{}, err
@@ -39,7 +41,7 @@ func (svc GetProductsByTextServiceDefinition) GetProductsByText(text string, req
 	for i, prod := range prods {
 		if isPalindromeString(text) {
 			prodsToReturn[i] = entities.ProductInfo{
-				Id:                 prod.Id,
+				ID:                 prod.ID,
 				Title:              prod.Title,
 				Description:        prod.Description,
 				ImageURL:           prod.ImageURL,
@@ -50,7 +52,7 @@ func (svc GetProductsByTextServiceDefinition) GetProductsByText(text string, req
 			continue
 		}
 		prodsToReturn[i] = entities.ProductInfo{
-			Id:                 prod.Id,
+			ID:                 prod.ID,
 			Title:              prod.Title,
 			Description:        prod.Description,
 			ImageURL:           prod.ImageURL,

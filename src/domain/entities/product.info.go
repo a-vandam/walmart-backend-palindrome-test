@@ -1,7 +1,8 @@
 package entities
 
+/*ProductInfo is an entity used to pass around and store Product information*/
 type ProductInfo struct {
-	Id                 int
+	ID                 int
 	Title              string
 	Description        string
 	ImageURL           string

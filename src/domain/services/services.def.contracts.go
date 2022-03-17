@@ -6,10 +6,12 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/domain/entities"
 )
 
-type GetProductByIdServiceContract interface {
-	GetProductById(id int, ctx context.Context) (entities.ProductInfo, error)
+/*GetProductByIDServiceContract is the contract that service must respect to be injected in the handler*/
+type GetProductByIDServiceContract interface {
+	GetProductByID(ctx context.Context, id int) (entities.ProductInfo, error)
 }
 
+/*GetProductByTextServiceContract is the contract that service must respect to be injected in the handler*/
 type GetProductByTextServiceContract interface {
-	GetProductsByText(string string, ctx context.Context) ([]entities.ProductInfo, error)
+	GetProductsByText(ctx context.Context, string string) ([]entities.ProductInfo, error)
 }

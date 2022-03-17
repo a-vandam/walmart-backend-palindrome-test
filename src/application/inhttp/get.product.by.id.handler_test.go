@@ -24,7 +24,7 @@ func TestGetExistingProdWithIdInPath(t *testing.T) {
 		bodyFile: "",
 		verb:     "GET",
 		svcProdsResponse: entities.ProductInfo{
-			Id:                 23,
+			ID:                 23,
 			Title:              "a product",
 			Description:        "i'm a merchandise",
 			ImageURL:           "http://blablabla",
@@ -33,7 +33,7 @@ func TestGetExistingProdWithIdInPath(t *testing.T) {
 			PriceModifications: -0.2,
 		},
 		expectedCode:     200,
-		expectedJsonResp: "json_examples/get.product.by.id_ok.response.json",
+		expectedJSONResp: "json_examples/get.product.by.id_ok.response.json",
 	}
 
 	t.Run(testCase.testName, testCase.testAndAssert)
@@ -48,7 +48,7 @@ func TestRequestToGetNonExistentProduct(t *testing.T) {
 		svcProdsResponse: entities.ProductInfo{},
 		svcErrResponse:   errors.New("no registry for id :9999 in database"),
 		expectedCode:     500,
-		expectedJsonResp: "json_examples/get.product.by.id_no_prod.found.json",
+		expectedJSONResp: "json_examples/get.product.by.id_no_prod.found.json",
 	}
 
 	t.Run(testCase.testName, testCase.testAndAssert)
@@ -63,7 +63,7 @@ type getProdByIDTestReq struct {
 	svcProdsResponse entities.ProductInfo
 	svcErrResponse   error
 	expectedCode     int
-	expectedJsonResp string
+	expectedJSONResp string
 }
 
 func (testCase getProdByIDTestReq) testAndAssert(t *testing.T) {
@@ -71,20 +71,20 @@ func (testCase getProdByIDTestReq) testAndAssert(t *testing.T) {
 
 	/**---------------------- FUNCTION UNDER TEST -----------------------**/
 	/*Dependencies*/
-	mockedSvc := getProdByIdSvcMock{
+	mockedSvc := getProdByIDSvcMock{
 		product: testCase.svcProdsResponse,
 		svcErr:  testCase.svcErrResponse,
 	}
 	loggerFactory := logger.LogFactory{LogLevel: "INFO"}
 	log := loggerFactory.CreateLog("")
-	dependencies := GetProductByIdHandlerDependencies{mockedSvc, log}
+	dependencies := GetProductByIDHandlerDependencies{mockedSvc, log}
 	/*END Dependencies*/
 	// Test function //
-	handlerFunc := CreateGetProdByIdHandlerFunc(dependencies)
+	handlerFunc := CreateGetProdByIDHandlerFunc(dependencies)
 
 	/*Create test request and server*/
 	var req *http.Request
-	requestContext := context.WithValue(context.Background(), ProductIdPathParamCtxKey{}, []string{fmt.Sprint(testCase.id)})
+	requestContext := context.WithValue(context.Background(), ProductIDPathParamCtxKey{}, []string{fmt.Sprint(testCase.id)})
 
 	if testCase.bodyFile == "" {
 		req = httptest.NewRequest(testCase.verb, testCase.path, nil)
@@ -110,7 +110,7 @@ func (testCase getProdByIDTestReq) testAndAssert(t *testing.T) {
 		t.FailNow()
 		return
 	}
-	expectedBody, bodyNotFoundErr := os.ReadFile(testCase.expectedJsonResp)
+	expectedBody, bodyNotFoundErr := os.ReadFile(testCase.expectedJSONResp)
 	if bodyNotFoundErr != nil {
 		t.Logf("json file that stores the expected body has not been found: %v", bodyNotFoundErr)
 		t.FailNow()
@@ -129,11 +129,11 @@ func (testCase getProdByIDTestReq) testAndAssert(t *testing.T) {
 	t.Logf("OK!!!! - test case:  %v  - OK!!!!", testCase.testName)
 }
 
-type getProdByIdSvcMock struct {
+type getProdByIDSvcMock struct {
 	product entities.ProductInfo
 	svcErr  error
 }
 
-func (mock getProdByIdSvcMock) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
+func (mock getProdByIDSvcMock) GetProductByID(ctx context.Context, id int) (entities.ProductInfo, error) {
 	return mock.product, mock.svcErr
 }

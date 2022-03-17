@@ -10,15 +10,17 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
-type GetProductByIdServiceDefinition struct {
-	Port ports.GetProductByIdPort
+/*GetProductByIDServiceDefinition establishes dependencies needed for the getProductByIdservice to work*/
+type GetProductByIDServiceDefinition struct {
+	Port ports.GetProductByIDPort
 	Log  logger.LogContract
 }
 
-func (svc GetProductByIdServiceDefinition) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
+/*GetProductByID declares the service implementation to get a product via ID*/
+func (svc GetProductByIDServiceDefinition) GetProductByID(ctx context.Context, id int) (entities.ProductInfo, error) {
 
 	svc.Log.Info("trying to look for a product with id: %v", id)
-	prod, err := svc.Port.GetProductById(id, ctx)
+	prod, err := svc.Port.GetProductByID(ctx, id)
 	if err != nil {
 		svc.Log.Error("error while looking for a product by id. id: %v , error: %v", id, err)
 		return entities.ProductInfo{}, err
@@ -30,7 +32,7 @@ func (svc GetProductByIdServiceDefinition) GetProductById(id int, ctx context.Co
 		return entities.ProductInfo{}, errors.New(msg)
 	}
 
-	if isPalindromeInt(prod.Id) {
+	if isPalindromeInt(prod.ID) {
 		svc.Log.Info("applying discount to product")
 		prod.FinalPrice = prod.FullPrice * DiscountByPalindrome
 		prod.PriceModifications = -1 * DiscountByPalindrome

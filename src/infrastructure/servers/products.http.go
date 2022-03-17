@@ -6,6 +6,7 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
+/*ProductsHTTPServer contains configurations for starting a http server*/
 type ProductsHTTPServer struct {
 	RouterFunc http.HandlerFunc
 	Host       string
@@ -13,6 +14,7 @@ type ProductsHTTPServer struct {
 	Log        logger.LogContract
 }
 
+/*Start should be invoked after struct initialization. This methods starts the HTTP server, with it's main handlerFunc and port declared*/
 func (svr *ProductsHTTPServer) Start() error {
 	svr.Log.Info("starting http server on host:%v and port: %v", svr.Host, svr.Port)
 	http.HandleFunc("/api", svr.RouterFunc)

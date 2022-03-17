@@ -6,9 +6,12 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/domain/entities"
 )
 
-type GetProductByIdPort interface {
-	GetProductById(id int, ctx context.Context) (entities.ProductInfo, error)
+/*GetProductByIDPort is the port definition to get a product via id*/
+type GetProductByIDPort interface {
+	GetProductByID(ctx context.Context, id int) (entities.ProductInfo, error)
 }
+
+/*GetProductsByTextPort is the Port definition to get a product by looking for text within it*/
 type GetProductsByTextPort interface {
-	GetProductsByText(text string, ctx context.Context) ([]entities.ProductInfo, error)
+	GetProductsByText(ctx context.Context, text string) ([]entities.ProductInfo, error)
 }

@@ -78,7 +78,7 @@ func TestParseInterfaceIntArrayToInt(t *testing.T) {
 
 	for i, testCase := range testCases {
 		t.Logf("testing parsing in method ParseInterfaceToInt32: test nmber: %v - %v", i, testCase.testName)
-		valueObtained := parseIdPathParamToInt(testCase.interfaceValue)
+		valueObtained := parseIDPathParamToInt(testCase.interfaceValue)
 		if !assert.Equal(t, testCase.expected, valueObtained, "diff between expected ( %v ) and obtained ( %v )", testCase.expected, valueObtained) {
 			t.FailNow()
 		}

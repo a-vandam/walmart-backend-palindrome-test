@@ -8,10 +8,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type ConnectorContract interface {
+/*MongoClientContract is the contract that all client's inyected upon the products adapter must comply.*/
+type MongoClientContract interface {
 	Connect(ctx context.Context, configs *configs.ProductsDBConfigurations) (*MongoConnector, error)
 	Ping(ctx context.Context) error
 	Disconnect(ctx context.Context) error
-	GetUsingFilter(ctx context.Context, filter bson.D) ([]string, error)
+	GetDatabaseNamesUsingFilter(ctx context.Context, filter bson.D) ([]string, error)
 	GetFromDatabaseUsingFilter(ctx context.Context, databaseName string, collectionName string, filter bson.D) ([]entities.ProductInfo, error)
 }

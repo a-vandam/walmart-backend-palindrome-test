@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
+/*MissingEnvVarErrorMsg sets standarized error msg in case the env var is missing*/
 const MissingEnvVarErrorMsg string = `missing: "%v" compulsory variable`
-const NoKeyRetrieved string = "missing environment variable name or key"
 
 func getCompulsoryEnvVar(envVarKey string) (string, error) {
 	if envVarKey == "" {

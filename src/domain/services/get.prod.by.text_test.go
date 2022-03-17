@@ -15,14 +15,14 @@ func TestGetProductsByText(t *testing.T) {
 		testName:     "retrieve products not palindrome",
 		returnedProdsInPortMock: []entities.ProductInfo{
 			{
-				Id:                 9999,
+				ID:                 9999,
 				Title:              "a example random product",
 				FullPrice:          1000,
 				FinalPrice:         1000,
 				PriceModifications: 0.0,
 			},
 			{
-				Id:                 123,
+				ID:                 123,
 				Title:              "a random product",
 				Description:        "example desc",
 				FullPrice:          1000,
@@ -32,14 +32,14 @@ func TestGetProductsByText(t *testing.T) {
 		},
 		expectedProd: []entities.ProductInfo{
 			{
-				Id:                 9999,
+				ID:                 9999,
 				Title:              "a example random product",
 				FullPrice:          1000,
 				FinalPrice:         1000,
 				PriceModifications: 0.0,
 			},
 			{
-				Id:                 123,
+				ID:                 123,
 				Title:              "a random product",
 				Description:        "example desc",
 				FullPrice:          1000,
@@ -59,14 +59,14 @@ func TestShorterThan3CharsSearchProductsByText(t *testing.T) {
 		testName:     "error when searching for less than 3 word",
 		returnedProdsInPortMock: []entities.ProductInfo{
 			{
-				Id:                 9999,
+				ID:                 9999,
 				Title:              "a ab example random product",
 				FullPrice:          1000,
 				FinalPrice:         1000,
 				PriceModifications: 0.0,
 			},
 			{
-				Id:                 123,
+				ID:                 123,
 				Title:              "a random product",
 				Description:        "example ab desc",
 				FullPrice:          1000,
@@ -87,14 +87,14 @@ func TestGetProductsWithPalindromeTexts(t *testing.T) {
 		textToSearch: "abba",
 		returnedProdsInPortMock: []entities.ProductInfo{
 			{
-				Id:                 9999,
+				ID:                 9999,
 				Title:              "a example abba random product",
 				FullPrice:          1000,
 				FinalPrice:         0,
 				PriceModifications: 0.0,
 			},
 			{
-				Id:                 123,
+				ID:                 123,
 				Title:              "a random product",
 				Description:        "example abba desc",
 				FullPrice:          2000,
@@ -104,14 +104,14 @@ func TestGetProductsWithPalindromeTexts(t *testing.T) {
 		},
 		expectedProd: []entities.ProductInfo{
 			{
-				Id:                 9999,
+				ID:                 9999,
 				Title:              "a example abba random product",
 				FullPrice:          1000,
 				FinalPrice:         500,
 				PriceModifications: -0.5,
 			},
 			{
-				Id:                 123,
+				ID:                 123,
 				Title:              "a random product",
 				Description:        "example abba desc",
 				FullPrice:          2000,
@@ -166,7 +166,7 @@ func (testCase getProdsByTextTestCase) testAndAssert(t *testing.T) {
 	}
 	/*END Dependencies*/
 	testCtx := context.Background()
-	product, err := svc.GetProductsByText(testCase.textToSearch, testCtx)
+	product, err := svc.GetProductsByText(testCtx, testCase.textToSearch)
 	/**---------------------- END FUNCTION UNDER TEST -----------------------**/
 
 	if !assert.Equal(t, testCase.expectedProd, product, "difference in value expected (%v) and obtained (%v)", testCase.expectedProd, product) {
@@ -190,12 +190,13 @@ func (testCase getProdsByTextTestCase) testAndAssert(t *testing.T) {
 	t.Logf("OK!!!! - test case:  %v  - OK!!!!", testCase.testName)
 }
 
-/*Mocking*/
+/*Mocking port*/
 type mockGetProductByTextPort struct {
 	products []entities.ProductInfo
 	err      error
 }
 
-func (mock mockGetProductByTextPort) GetProductsByText(text string, ctx context.Context) ([]entities.ProductInfo, error) {
+/*Mocking port's functions*/
+func (mock mockGetProductByTextPort) GetProductsByText(ctx context.Context, text string) ([]entities.ProductInfo, error) {
 	return mock.products, mock.err
 }

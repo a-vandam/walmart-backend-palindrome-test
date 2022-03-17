@@ -8,10 +8,11 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/domain/entities"
 )
 
-type ProductIdPathParamCtxKey struct {
+/*Key used for retrieving path params from the req's context.*/
+type productIDPathParamCtxKey struct {
 }
 
-const DefaultErrorInt int = 0
+const defaultParseErrorInt int = 0
 
 func parseInterfaceToInt(element interface{}) int {
 
@@ -22,7 +23,7 @@ func parseInterfaceToInt(element interface{}) int {
 	valueAsString, parseable := element.(string)
 
 	if !parseable {
-		return DefaultErrorInt
+		return defaultParseErrorInt
 	}
 
 	valueAsInt, err := strconv.Atoi(valueAsString)
@@ -32,44 +33,44 @@ func parseInterfaceToInt(element interface{}) int {
 	defer func() {
 		parseConvErr := recover()
 		if parseConvErr != nil {
-			valueAsInt = DefaultErrorInt
+			valueAsInt = defaultParseErrorInt
 		}
 	}()
 	return valueAsInt
 }
 
-func parseIdPathParamToInt(element interface{}) int {
+func parseIDPathParamToInt(element interface{}) int {
 	elementAsInts, parseableToArray := element.([]int)
 	if !parseableToArray {
-		return DefaultErrorInt
+		return defaultParseErrorInt
 	}
 	elementAsInt := elementAsInts[0]
 	defer func() {
 		parseConvErr := recover()
 		if parseConvErr != nil {
-			elementAsInt = DefaultErrorInt
+			elementAsInt = defaultParseErrorInt
 		}
 	}()
 	return elementAsInt
 }
 
-const ErrorResponseBody string = `{"error":"%v", "resources":{}}`
+const errorResponseBody string = `{"error":"%v", "resources":{}}`
 
-func wrapErrAsJson(err error) string {
-	return fmt.Sprintf(ErrorResponseBody, err.Error())
+func wrapErrAsJSON(err error) string {
+	return fmt.Sprintf(errorResponseBody, err.Error())
 }
 
-type embeddingOneResourceJsonResponse struct {
+type embeddingOneResourceJSONResponse struct {
 	ErrMsg    string                 `json:"error"`
-	Resources getProductJsonResponse `json:"resources"`
+	Resources getProductJSONResponse `json:"resources"`
 }
 
-type embeddingMultipleResourcesJsonResponse struct {
+type embeddingMultipleResourcesJSONResponse struct {
 	ErrMsg    string                   `json:"error"`
-	Resources []getProductJsonResponse `json:"resources"`
+	Resources []getProductJSONResponse `json:"resources"`
 }
-type getProductJsonResponse struct {
-	Id                 int     `json:"id"`
+type getProductJSONResponse struct {
+	ID                 int     `json:"id"`
 	Title              string  `json:"title"`
 	Description        string  `json:"description"`
 	ImageURL           string  `json:"imageURL"`
@@ -78,11 +79,11 @@ type getProductJsonResponse struct {
 	PriceModifications float32 `json:"priceModifications"`
 }
 
-func mapProductToJsonResponse(prod *entities.ProductInfo) ([]byte, error) {
-	responseDTO := embeddingOneResourceJsonResponse{
+func mapProductToJSONResponse(prod *entities.ProductInfo) ([]byte, error) {
+	responseDTO := embeddingOneResourceJSONResponse{
 		ErrMsg: "",
-		Resources: getProductJsonResponse{
-			Id:                 prod.Id,
+		Resources: getProductJSONResponse{
+			ID:                 prod.ID,
 			Title:              prod.Title,
 			Description:        prod.Description,
 			ImageURL:           prod.ImageURL,
@@ -95,11 +96,11 @@ func mapProductToJsonResponse(prod *entities.ProductInfo) ([]byte, error) {
 
 	return responseBody, err
 }
-func mapProductsToJsonResponse(prods []entities.ProductInfo) ([]byte, error) {
-	resources := make([]getProductJsonResponse, len(prods))
+func mapProductsToJSONResponse(prods []entities.ProductInfo) ([]byte, error) {
+	resources := make([]getProductJSONResponse, len(prods))
 	for i, prod := range prods {
-		resources[i] = getProductJsonResponse{
-			Id:                 prod.Id,
+		resources[i] = getProductJSONResponse{
+			ID:                 prod.ID,
 			Title:              prod.Title,
 			Description:        prod.Description,
 			ImageURL:           prod.ImageURL,
@@ -108,7 +109,7 @@ func mapProductsToJsonResponse(prods []entities.ProductInfo) ([]byte, error) {
 			PriceModifications: prod.PriceModifications,
 		}
 	}
-	response := embeddingMultipleResourcesJsonResponse{ErrMsg: "", Resources: resources}
+	response := embeddingMultipleResourcesJSONResponse{ErrMsg: "", Resources: resources}
 	responseBody, err := json.Marshal(response)
 
 	return responseBody, err

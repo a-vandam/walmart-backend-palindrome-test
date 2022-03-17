@@ -16,7 +16,7 @@ func TestGetAProduct(t *testing.T) {
 		id:       123,
 		existingProductsInPortMock: map[int]entities.ProductInfo{
 			123: {
-				Id:                 123,
+				ID:                 123,
 				Title:              "a random product",
 				FullPrice:          1000,
 				FinalPrice:         1000,
@@ -24,7 +24,7 @@ func TestGetAProduct(t *testing.T) {
 			},
 		},
 		expectedProd: entities.ProductInfo{
-			Id:                 123,
+			ID:                 123,
 			Title:              "a random product",
 			FullPrice:          1000,
 			FinalPrice:         1000,
@@ -43,14 +43,14 @@ func TestGetProductWithPalindromeId(t *testing.T) {
 		id:       181,
 		existingProductsInPortMock: map[int]entities.ProductInfo{
 			181: {
-				Id:          181,
+				ID:          181,
 				Title:       "a palindromic(?) product",
 				FullPrice:   1000,
 				Description: "palindrome",
 			},
 		},
 		expectedProd: entities.ProductInfo{
-			Id:                 181,
+			ID:                 181,
 			Title:              "a palindromic(?) product",
 			FullPrice:          1000,
 			FinalPrice:         500,
@@ -70,7 +70,7 @@ func TestNoProductFound(t *testing.T) {
 		id:       55,
 		existingProductsInPortMock: map[int]entities.ProductInfo{
 			181: {
-				Id:          181,
+				ID:          181,
 				Title:       "a palindromic(?) product",
 				FullPrice:   1000,
 				Description: "palindrome",
@@ -99,19 +99,19 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 
 	/**---------------------- FUNCTION UNDER TEST -----------------------**/
 	/*Dependencies*/
-	mockedPort := mockedGetProductByIdPort{
+	mockedPort := mockedGetProductByIDPort{
 		products: testCase.existingProductsInPortMock,
 		err:      testCase.errorPortInMock,
 	}
 	loggerFactory := logger.LogFactory{LogLevel: "INFO"}
 	log := loggerFactory.CreateLog("")
-	svc := GetProductByIdServiceDefinition{
+	svc := GetProductByIDServiceDefinition{
 		Port: mockedPort,
 		Log:  log,
 	}
 	/*END Dependencies*/
 	testCtx := context.Background()
-	product, err := svc.GetProductById(testCase.id, testCtx)
+	product, err := svc.GetProductByID(testCtx, testCase.id)
 	/**---------------------- END FUNCTION UNDER TEST -----------------------**/
 
 	if !assert.Equal(t, testCase.expectedProd, product, "difference in value expected (%v) and obtained (%v)", testCase.expectedProd, product) {
@@ -136,11 +136,11 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 }
 
 /*Mocking*/
-type mockedGetProductByIdPort struct {
+type mockedGetProductByIDPort struct {
 	products map[int]entities.ProductInfo
 	err      error
 }
 
-func (mock mockedGetProductByIdPort) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
+func (mock mockedGetProductByIDPort) GetProductByID(ctx context.Context, id int) (entities.ProductInfo, error) {
 	return mock.products[id], mock.err
 }
