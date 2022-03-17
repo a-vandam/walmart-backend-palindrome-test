@@ -9,3 +9,6 @@ import (
 type GetProductByIdPort interface {
 	GetProductById(id int, ctx context.Context) (entities.ProductInfo, error)
 }
+type GetProductsByTextPort interface {
+	GetProductsByText(text string, ctx context.Context) ([]entities.ProductInfo, error)
+}

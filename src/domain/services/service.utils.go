@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+const DiscountByPalindrome float32 = 0.5
+
 func isPalindromeInt(id int) bool {
 	intAsString := strconv.FormatUint(uint64(id), 10)
 	return isPalindromeString(intAsString)

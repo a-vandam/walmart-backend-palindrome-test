@@ -99,7 +99,7 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 
 	/**---------------------- FUNCTION UNDER TEST -----------------------**/
 	/*Dependencies*/
-	mockedPort := mockPort{
+	mockedPort := mockedGetProductByIdPort{
 		products: testCase.existingProductsInPortMock,
 		err:      testCase.errorPortInMock,
 	}
@@ -136,11 +136,11 @@ func (testCase getProdByIDTestCase) testAndAssert(t *testing.T) {
 }
 
 /*Mocking*/
-type mockPort struct {
+type mockedGetProductByIdPort struct {
 	products map[int]entities.ProductInfo
 	err      error
 }
 
-func (mock mockPort) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
+func (mock mockedGetProductByIdPort) GetProductById(id int, ctx context.Context) (entities.ProductInfo, error) {
 	return mock.products[id], mock.err
 }

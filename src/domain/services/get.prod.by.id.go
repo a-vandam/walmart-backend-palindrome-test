@@ -10,8 +10,6 @@ import (
 	"gitlab.com/a.vandam/product-search-challenge/src/logger"
 )
 
-const DiscountByPalindromeId float32 = 0.5
-
 type GetProductByIdServiceDefinition struct {
 	Port ports.GetProductByIdPort
 	Log  logger.LogContract
@@ -34,14 +32,11 @@ func (svc GetProductByIdServiceDefinition) GetProductById(id int, ctx context.Co
 
 	if isPalindromeInt(prod.Id) {
 		svc.Log.Info("applying discount to product")
-		prod.FinalPrice = prod.FullPrice * DiscountByPalindromeId
-		prod.PriceModifications = -1 * DiscountByPalindromeId
+		prod.FinalPrice = prod.FullPrice * DiscountByPalindrome
+		prod.PriceModifications = -1 * DiscountByPalindrome
 	} else {
 		prod.FinalPrice = prod.FullPrice
 		prod.PriceModifications = 0
 	}
 	return prod, err
-}
-func applyDiscount(product *entities.ProductInfo, discount float32) {
-
 }
