@@ -84,7 +84,7 @@ func (testCase getProdByTextTestReq) testAndAssert(t *testing.T) {
 	}
 	loggerFactory := logger.LogFactory{LogLevel: "DEBUG"}
 	log := loggerFactory.CreateLog("")
-	dependencies := GetProductByField{mockedSvc, log}
+	dependencies := GetProductsByField{mockedSvc, log}
 	/*END Dependencies*/
 	// Test function //
 	handlerFunc := CreateGetProductByFieldHandlerFunc(dependencies)
@@ -138,6 +138,6 @@ type getProdByTextSvcMock struct {
 	svcErr  error
 }
 
-func (mock getProdByTextSvcMock) GetProductByText(text string, ctx context.Context) ([]entities.ProductInfo, error) {
+func (mock getProdByTextSvcMock) GetProductsByText(text string, ctx context.Context) ([]entities.ProductInfo, error) {
 	return mock.product, mock.svcErr
 }

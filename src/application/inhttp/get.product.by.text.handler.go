@@ -27,7 +27,7 @@ func CreateGetProductByFieldHandlerFunc(dep GetProductByField) http.HandlerFunc 
 		//Useful for time outs
 		reqContext := req.Context()
 		dep.Log.Debug("created context to obtain products")
-		products, err := dep.Svc.GetProductByText(textToSearch, reqContext)
+		products, err := dep.Svc.GetProductsByText(textToSearch, reqContext)
 		if err != nil {
 			dep.Log.Error("received an error while fetching products by text: %v", err)
 			http.Error(rw, wrapErrAsJson(err), http.StatusInternalServerError)
