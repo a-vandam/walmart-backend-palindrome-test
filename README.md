@@ -88,6 +88,6 @@ The Walmart repo can be found here:
 
 Useful resources:
 If you want to get a grasp of some parts implemented here, read from:
-    * https://benhoyt.com/writings/go-routing/ - AWESOME article on path parameters in Go and routing.
-    * https://www.honeybadger.io/blog/golang-logging/  - Great article on diff logging strategies and   practices
-    * https://www.youtube.com/watch?v=oL6JBUk6tj0 - Great talk about different approaches to manage package distribution in Golang. 
+        * https://benhoyt.com/writings/go-routing/ - AWESOME article on path parameters in Go and routing.
+        * https://www.honeybadger.io/blog/golang-logging/  - Great article on diff logging strategies and   practices
+        * https://www.youtube.com/watch?v=oL6JBUk6tj0 - Great talk about different approaches to manage package distribution in Golang. 
