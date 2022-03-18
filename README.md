@@ -27,9 +27,6 @@ FAQ:
         TBH, because I wanted to see what I could do with the standard library. Although I knew I would face limitations as I use Go at work as a Proffesional, it was a way to get revenge on little things that I've had to bypass and not give attention to, as I work under the stress of time. MAINLY, Routers . And reusing Test Code.
     - Why no tests on the MongoDBAdapter?
         I just didn't have the time.
-    - Are you planning to add Integration tests?
-        Of course. Could not add them until now as I was rushing with the assignment, and I work 9hs a day. 
-
 
 How to:
 
