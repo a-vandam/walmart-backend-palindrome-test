@@ -1,5 +1,5 @@
 ### Product-Search-Challenge ###
-This project was created to perform a tech interview for Walmart Back End's positions. To this date (17/3/2022) consists of:
+This project was created to perform a tech interview for a back end position. To this date (17/3/2022) consists of:
     * Go 1.17.8
     * MongoDB Database (found here), provided by Walmart to be used as an example
     * MongoDB Client for connection to the DB.
